@@ -1,6 +1,6 @@
 ---
-upstream_project_url: https://github.com/authselect/authselect
-issue_repository: https://github.com/authselect/authselect
+upstream_project_url: https://github.com/nforro/authselect
+issue_repository: https://github.com/nforro/authselect
 
 upstream_package_name: authselect
 specfile_path: authselect.spec
