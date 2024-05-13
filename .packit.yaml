@@ -8,18 +8,6 @@ specfile_path: authselect.spec
 actions:
   post-upstream-clone:
     - bash -c "sed -E 's/@\w+@/0/g' rpm/authselect.spec.in > authselect.spec"
-    - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0901-rhel10-remove-systemd-homed.patch
-    - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0902-rhel10-remove-ecryptfs-support.patch
-    - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0903-rhel10-remove-systemd-resolved.patch
-    - |
-      bash -c "sed -i '0,/^BuildRequires/s//# RHEL-only patches\
-      %if 0%{?rhel}\
-      Patch0901: 0901-rhel10-remove-systemd-homed.patch\
-      Patch0902: 0902-rhel10-remove-ecryptfs-support.patch\
-      Patch0903: 0903-rhel10-remove-systemd-resolved.patch\
-      %endif\
-      \
-      &/' authselect.spec"
 
 jobs:
   - job: copr_build
@@ -33,6 +21,21 @@ jobs:
     trigger: release
     dist_git_branches:
       - fedora-rawhide
+    actions:
+      post-upstream-clone:
+        - bash -c "sed -E 's/@\w+@/0/g' rpm/authselect.spec.in > authselect.spec"
+        - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0901-rhel10-remove-systemd-homed.patch
+        - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0902-rhel10-remove-ecryptfs-support.patch
+        - wget https://src.fedoraproject.org/rpms/authselect/raw/main/f/0903-rhel10-remove-systemd-resolved.patch
+        - |
+          bash -c "sed -i '0,/^BuildRequires/s//# RHEL-only patches\
+          %if 0%{?rhel}\
+          Patch0901: 0901-rhel10-remove-systemd-homed.patch\
+          Patch0902: 0902-rhel10-remove-ecryptfs-support.patch\
+          Patch0903: 0903-rhel10-remove-systemd-resolved.patch\
+          %endif\
+          \
+          &/' authselect.spec"
 
   - job: koji_build
     trigger: commit
